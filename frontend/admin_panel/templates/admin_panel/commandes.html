@@ -1,0 +1,174 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}
+Commandes
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Gestion des commandes</h1>
+    <p>Liste des commandes passées par les clients.</p>
+</div>
+
+<div class="card">
+
+    {% if commandes %}
+
+    <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+
+        <thead>
+            <tr>
+                <th style="padding: 18px 15px; text-align: left;">ID</th>
+                <th style="padding: 18px 15px; text-align: left;">Client</th>
+                <th style="padding: 18px 15px; text-align: left;">Médicament</th>
+                <th style="padding: 18px 15px; text-align: center;">Quantité</th>
+                <th style="padding: 18px 15px; text-align: right;">Prix unitaire</th>
+                <th style="padding: 18px 15px; text-align: right;">Total</th>
+                <th style="padding: 18px 15px; text-align: left;">Date</th>
+                <th style="padding: 18px 15px; text-align: center;">Statut</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for commande in commandes %}
+
+            <tr>
+
+                <td style="padding: 18px 15px;">
+                    #{{ commande.id }}
+                </td>
+
+                <td style="padding: 18px 15px;">
+                    <strong>
+                        {{ commande.client_username }}
+                    </strong>
+                </td>
+
+                <td style="padding: 18px 15px;">
+
+                    {% for ligne in commande.lignes %}
+
+                        <div style="margin-bottom: 6px;">
+                            {{ ligne.medicament_nom }}
+                        </div>
+
+                    {% empty %}
+
+                        -
+
+                    {% endfor %}
+
+                </td>
+
+                <td style="padding: 18px 15px; text-align: center;">
+
+                    {% for ligne in commande.lignes %}
+
+                        <div style="margin-bottom: 6px;">
+                            {{ ligne.quantite }}
+                        </div>
+
+                    {% empty %}
+
+                        -
+
+                    {% endfor %}
+
+                </td>
+
+                <td style="padding: 18px 15px; text-align: right;">
+
+                    {% for ligne in commande.lignes %}
+
+                        <div style="margin-bottom: 6px;">
+                            {{ ligne.prix_unitaire }} DH
+                        </div>
+
+                    {% empty %}
+
+                        -
+
+                    {% endfor %}
+
+                </td>
+
+                <td style="padding: 18px 15px; text-align: right;">
+                    <strong>
+                        {{ commande.total }} DH
+                    </strong>
+                </td>
+
+                <td style="padding: 18px 15px;">
+                    {{ commande.date_creation|date:"d/m/Y H:i" }}
+                </td>
+
+                <td style="padding: 18px 15px; text-align: center;">
+
+                    <form method="post"
+                          action="{% url 'modifier_statut_commande' commande.id %}">
+
+                        {% csrf_token %}
+
+                        <select name="statut"
+                                onchange="this.form.submit()"
+                                style="
+                                    padding: 8px 10px;
+                                    border: 1px solid #ccc;
+                                    border-radius: 6px;
+                                    background: white;
+                                    min-width: 130px;
+                                ">
+
+                            <option value="EN_ATTENTE"
+                                {% if commande.statut == "EN_ATTENTE" %}
+                                    selected
+                                {% endif %}>
+                                En attente
+                            </option>
+
+                            <option value="EN_COURS"
+                                {% if commande.statut == "EN_COURS" %}
+                                    selected
+                                {% endif %}>
+                                En cours
+                            </option>
+
+                            <option value="LIVREE"
+                                {% if commande.statut == "LIVREE" %}
+                                    selected
+                                {% endif %}>
+                                Livrée
+                            </option>
+
+                            <option value="ANNULEE"
+                                {% if commande.statut == "ANNULEE" %}
+                                    selected
+                                {% endif %}>
+                                Annulée
+                            </option>
+
+                        </select>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <p>Aucune commande pour le moment.</p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

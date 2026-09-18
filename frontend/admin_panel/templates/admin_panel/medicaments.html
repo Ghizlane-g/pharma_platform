@@ -1,0 +1,151 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}
+Médicaments
+{% endblock %}
+
+{% block content %}
+
+<h1>Gestion des médicaments</h1>
+
+<p style="margin-top: 10px; color: #6b7280;">
+    Liste des médicaments disponibles sur la plateforme.
+</p>
+
+<div class="card" style="margin-top: 25px;">
+
+    {% if error %}
+        <div style="padding: 15px; color: red; font-weight: bold;">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <a href="{% url 'ajouter_medicament' %}">
+        <button
+            style="
+                padding: 10px 18px;
+                border: none;
+                border-radius: 7px;
+                cursor: pointer;
+            "
+        >
+             Ajouter un médicament
+        </button>
+    </a>
+
+</div>
+
+<br>
+
+<table style="width: 100%; border-collapse: collapse;">
+
+    <thead>
+
+        <tr style="text-align: left; border-bottom: 1px solid #ddd;">
+
+            <th style="padding: 15px;">
+                ID
+            </th>
+
+            <th style="padding: 15px;">
+                Nom
+            </th>
+
+            <th style="padding: 15px;">
+                Classe
+            </th>
+
+            <th style="padding: 15px;">
+                Prix
+            </th>
+
+            <th style="padding: 15px;">
+                Statut
+            </th>
+
+            <th style="padding: 15px;">
+                Actions
+            </th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for medicament in medicaments %}
+
+        <tr style="border-bottom: 1px solid #eee;">
+
+            <td style="padding: 15px;">
+                {{ medicament.id }}
+            </td>
+
+            <td style="padding: 15px;">
+                {{ medicament.nom }}
+            </td>
+
+            <td style="padding: 15px;">
+                {{ medicament.classe }}
+            </td>
+
+            <td style="padding: 15px;">
+                {{ medicament.prix }} DH
+            </td>
+
+            <td style="padding: 15px;">
+
+                {% if medicament.statut == "DISPONIBLE" %}
+                    Disponible
+                {% else %}
+                    Non disponible
+                {% endif %}
+
+            </td>
+
+            <td style="padding: 15px;">
+
+                <a href="{% url 'modifier_medicament' medicament.id %}">
+                    Modifier
+                </a>
+
+                {% if medicament.statut == "DISPONIBLE" %}
+
+                    |
+                    <a href="{% url 'desactiver_medicament' medicament.id %}">
+                        Rendre non disponible
+                    </a>
+
+                {% else %}
+
+                    |
+                    <a href="{% url 'activer_medicament' medicament.id %}">
+                        Rendre disponible
+                    </a>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td
+                colspan="6"
+                style="padding: 20px; text-align: center;"
+            >
+                Aucun médicament trouvé.
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

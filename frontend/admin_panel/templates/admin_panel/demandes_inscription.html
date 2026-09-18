@@ -1,0 +1,210 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}
+Demandes d'inscription
+{% endblock %}
+
+{% block content %}
+
+<h1>Demandes d'inscription</h1>
+
+{% if error %}
+<div class="error">
+    {{ error }}
+</div>
+{% endif %}
+
+<div class="table-container">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for demande in demandes %}
+
+            <tr>
+
+                <td>
+                    {{ demande.nom }}
+                </td>
+
+                <td>
+                    {{ demande.prenom }}
+                </td>
+
+                <td>
+                    {{ demande.username }}
+                </td>
+
+                <td>
+                    {{ demande.email }}
+                </td>
+
+                <td>
+                    {{ demande.role }}
+                </td>
+
+                <td>
+                    {{ demande.date_creation }}
+                </td>
+
+                <td class="actions">
+
+                    <!-- ACCEPTER -->
+
+                    <form
+                        method="POST"
+                        action="{% url 'accepter_demande_frontend' demande.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn-accepter"
+                        >
+                            ✓ Accepter
+                        </button>
+
+                    </form>
+
+
+                    <!-- REFUSER -->
+
+                    <form
+                        method="POST"
+                        action="{% url 'refuser_demande_frontend' demande.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn-refuser"
+                        >
+                            ✕ Refuser
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="7" class="empty">
+                    Aucune demande d'inscription en attente.
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<style>
+
+.table-container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #f5f6fa;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 14px;
+    color: #374151;
+}
+
+td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #eeeeee;
+    vertical-align: middle;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.actions form {
+    margin: 0;
+}
+
+button {
+    border: none;
+    padding: 9px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn-accepter {
+    background: #30bd66;
+    color: white;
+}
+
+.btn-accepter:hover {
+    background: #269e55;
+}
+
+.btn-refuser {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-refuser:hover {
+    background: #dc2626;
+}
+
+.error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #6b7280;
+}
+
+</style>
+
+{% endblock %}

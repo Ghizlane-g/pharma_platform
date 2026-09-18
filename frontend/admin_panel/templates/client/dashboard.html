@@ -1,0 +1,899 @@
+{% extends "client/base.html" %}
+
+{% block title %}
+    Dashboard - Pharma Plateforme
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+        min-height: 350px;
+
+        background:
+            linear-gradient(
+                180deg,
+                #f2fff5 0%,
+                #fafffb 100%
+            );
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        text-align: center;
+
+        padding: 50px 20px;
+
+        border-radius: 12px;
+    }
+
+
+    .hero-content {
+        max-width: 650px;
+        width: 100%;
+    }
+
+
+    .hero h1 {
+        font-size: 40px;
+        line-height: 1.05;
+
+        color: #111827;
+
+        margin-bottom: 20px;
+
+        font-weight: 700;
+    }
+
+
+    .hero h1 span {
+        color: #087443;
+    }
+
+
+    .hero p {
+        color: #6b7280;
+
+        font-size: 15px;
+        line-height: 1.6;
+
+        margin-bottom: 28px;
+    }
+
+
+    /* =========================
+       RECHERCHE
+    ========================= */
+
+    .search-area {
+
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+
+        gap: 15px;
+
+        max-width: 500px;
+
+        margin: auto;
+    }
+
+
+    .search-box {
+
+        flex: 1;
+
+        height: 42px;
+
+        background: white;
+
+        border: 1px solid #d9dee5;
+
+        border-radius: 7px;
+
+        box-shadow:
+            0 2px 5px
+            rgba(0,0,0,0.08);
+
+        display: flex;
+
+        align-items: center;
+
+        padding: 0 12px;
+    }
+
+
+    .search-icon {
+        color: #9ca3af;
+        margin-right: 8px;
+    }
+
+
+    .search-box input {
+
+        width: 100%;
+
+        border: none;
+
+        outline: none;
+
+        font-size: 13px;
+
+        color: #374151;
+    }
+
+
+    .search-box input::placeholder {
+        color: #9ca3af;
+    }
+
+
+    .catalog-button {
+
+        height: 42px;
+
+        padding: 0 22px;
+
+        border: none;
+
+        border-radius: 7px;
+
+        background: #087443;
+
+        color: white;
+
+        font-weight: bold;
+
+        font-size: 12px;
+
+        cursor: pointer;
+
+        text-decoration: none;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        white-space: nowrap;
+
+        transition: 0.2s;
+    }
+
+
+    .catalog-button:hover {
+        background: #065c35;
+    }
+
+
+    /* =========================
+       SECTION CATEGORIES
+    ========================= */
+
+    .section-title {
+
+        margin-top: 35px;
+
+        margin-bottom: 20px;
+
+        color: #111827;
+
+        font-size: 24px;
+    }
+
+
+    .categories {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(180px, 1fr)
+            );
+
+        gap: 20px;
+
+        margin-bottom: 35px;
+    }
+
+
+    .category-card {
+
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 12px;
+
+        padding: 25px 15px;
+
+        text-decoration: none;
+
+        color: #111827;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 12px;
+
+        min-height: 140px;
+
+        box-shadow:
+            0 2px 8px
+            rgba(0,0,0,0.06);
+
+        transition: 0.2s;
+    }
+
+
+    .category-card:hover {
+
+        transform: translateY(-4px);
+
+        border-color: #30bd66;
+
+        color: #087443;
+
+        box-shadow:
+            0 5px 15px
+            rgba(0,0,0,0.10);
+    }
+
+
+    .category-icon {
+
+        width: 55px;
+
+        height: 55px;
+
+        border-radius: 50%;
+
+        background: #eaf8ef;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 25px;
+    }
+
+
+    .category-name {
+
+        font-size: 15px;
+
+        font-weight: bold;
+
+        text-align: center;
+    }
+
+
+    /* =========================
+       RETOUR AUX CATÉGORIES
+    ========================= */
+
+    .back-button {
+
+        display: inline-block;
+
+        margin-bottom: 20px;
+
+        padding: 9px 15px;
+
+        border-radius: 7px;
+
+        background: #f3f4f6;
+
+        color: #374151;
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: bold;
+    }
+
+
+    .back-button:hover {
+
+        background: #e5e7eb;
+    }
+
+
+    /* =========================
+       MÉDICAMENTS
+    ========================= */
+
+    .medicaments-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(280px, 1fr)
+            );
+
+        gap: 20px;
+    }
+
+
+    .medicament-card {
+
+        background: white;
+
+        padding: 22px;
+
+        border-radius: 12px;
+
+        border: 1px solid #e5e7eb;
+
+        box-shadow:
+            0 2px 8px
+            rgba(0,0,0,0.06);
+
+        transition: 0.2s;
+    }
+
+
+    .medicament-card:hover {
+
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 5px 15px
+            rgba(0,0,0,0.10);
+    }
+
+
+    .medicament-card h2 {
+
+        color: #087443;
+
+        font-size: 20px;
+
+        margin-bottom: 12px;
+    }
+
+
+    .description {
+
+        color: #6b7280;
+
+        line-height: 1.5;
+
+        margin-bottom: 15px;
+
+        font-size: 14px;
+    }
+
+
+    .price {
+
+        font-size: 17px;
+
+        font-weight: bold;
+
+        margin-bottom: 10px;
+
+        color: #111827;
+    }
+
+
+    .status {
+
+        margin-bottom: 20px;
+
+        font-size: 14px;
+    }
+
+
+    .available {
+
+        color: #198754;
+
+        font-weight: bold;
+    }
+
+
+    .unavailable {
+
+        color: #dc3545;
+
+        font-weight: bold;
+    }
+
+
+    /* =========================
+       PANIER
+    ========================= */
+
+    .quantity-label {
+
+        display: block;
+
+        margin-bottom: 6px;
+
+        font-size: 13px;
+
+        font-weight: bold;
+
+        color: #374151;
+    }
+
+
+    .quantity-input {
+
+        width: 75px;
+
+        padding: 8px;
+
+        margin-bottom: 12px;
+
+        border: 1px solid #d1d5db;
+
+        border-radius: 6px;
+
+        outline: none;
+    }
+
+
+    .quantity-input:focus {
+
+        border-color: #30bd66;
+    }
+
+
+    .cart-button {
+
+        width: 100%;
+
+        background: #30bd66;
+
+        color: white;
+
+        border: none;
+
+        padding: 11px 18px;
+
+        border-radius: 7px;
+
+        cursor: pointer;
+
+        font-weight: bold;
+
+        transition: 0.2s;
+    }
+
+
+    .cart-button:hover {
+
+        background: #229d53;
+    }
+
+
+    .disabled-button {
+
+        width: 100%;
+
+        background: #ccc;
+
+        color: white;
+
+        border: none;
+
+        padding: 11px 18px;
+
+        border-radius: 7px;
+
+        cursor: not-allowed;
+
+        font-weight: bold;
+    }
+
+
+    /* =========================
+       MESSAGE VIDE
+    ========================= */
+
+    .empty-card {
+
+        background: white;
+
+        padding: 30px;
+
+        border-radius: 12px;
+
+        text-align: center;
+
+        color: #6b7280;
+
+        border: 1px solid #e5e7eb;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 650px) {
+
+        .hero h1 {
+            font-size: 32px;
+        }
+
+        .search-area {
+            flex-direction: column;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .catalog-button {
+            width: 100%;
+        }
+
+        .categories {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+    }
+
+</style>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+
+            Votre <span>Santé</span>,<br>
+
+            notre <span>priorité.</span>
+
+        </h1>
+
+
+        <p>
+
+            Trouvez rapidement vos médicaments et gérez
+            vos commandes en toute simplicité sur notre
+            plateforme sécurisée.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     CATÉGORIES
+========================= -->
+
+<section id="categories">
+
+    <h2 class="section-title">
+        Catégories de médicaments
+    </h2>
+
+
+    <div class="categories">
+
+
+        <!-- ANTALGIQUES -->
+
+        <a
+            href="?classe=ANTALGIQUES"
+            class="category-card"
+        >
+
+            <div class="category-name">
+                Antalgiques
+            </div>
+
+        </a>
+
+
+        <!-- ANTIBIOTIQUES -->
+
+        <a
+            href="?classe=ANTIBIOTIQUES"
+            class="category-card"
+        >
+
+            
+            <div class="category-name">
+                Antibiotiques
+            </div>
+
+        </a>
+
+
+        <!-- ANTI-INFLAMMATOIRES -->
+
+        <a
+            href="?classe=ANTI_INFLAMMATOIRES"
+            class="category-card"
+        >
+
+
+            <div class="category-name">
+                Anti-inflammatoires
+            </div>
+
+        </a>
+
+
+        <!-- VITAMINES -->
+
+        <a
+            href="?classe=VITAMINES"
+            class="category-card"
+        >
+
+            
+
+            <div class="category-name">
+                Vitamines
+            </div>
+
+        </a>
+
+
+        <!-- DIGESTIFS -->
+
+        <a
+            href="?classe=DIGESTIFS"
+            class="category-card"
+        >
+
+
+            <div class="category-name">
+                Digestifs
+            </div>
+
+        </a>
+
+
+        <!-- CARDIOLOGIE -->
+
+        <a
+            href="?classe=CARDIOLOGIE"
+            class="category-card"
+        >
+
+           
+
+            <div class="category-name">
+                Cardiologie
+            </div>
+
+        </a>
+
+
+        <!-- AUTRES -->
+
+        <a
+            href="?classe=AUTRES"
+            class="category-card"
+        >
+
+
+
+            <div class="category-name">
+                Autres
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     MÉDICAMENTS DE LA CLASSE
+========================= -->
+
+{% if classe_selectionnee %}
+
+
+    <a
+        href="{% url 'client_dashboard' %}"
+        class="back-button"
+    >
+        ← Toutes les catégories
+    </a>
+
+
+    <h2 class="section-title">
+
+        Médicaments :
+        {{ classe_selectionnee }}
+
+    </h2>
+
+
+    {% if medicaments %}
+
+
+        <div class="medicaments-grid">
+
+
+            {% for medicament in medicaments %}
+
+
+                <div class="medicament-card">
+
+
+                    <h2>
+                        {{ medicament.nom }}
+                    </h2>
+
+
+                    <p class="description">
+
+                        {{ medicament.classe }}
+
+                    </p>
+
+
+                    <p class="price">
+
+                        Prix :
+                        {{ medicament.prix }}
+                        DH
+
+                    </p>
+
+
+                    <p class="status">
+
+                        <strong>
+                            Statut :
+                        </strong>
+
+
+                        {% if medicament.statut == "DISPONIBLE" %}
+
+                            <span class="available">
+
+                                Disponible
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="unavailable">
+
+                                Non disponible
+
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+
+
+                    <!-- AJOUT PANIER -->
+
+                    {% if medicament.statut == "DISPONIBLE" %}
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'ajouter_panier' %}"
+                        >
+
+                            {% csrf_token %}
+
+
+                            <input
+                                type="hidden"
+                                name="medicament_id"
+                                value="{{ medicament.id }}"
+                            >
+
+
+                            <label
+                                class="quantity-label"
+                            >
+                                Quantité :
+                            </label>
+
+
+                            <input
+                                type="number"
+                                name="quantite"
+                                value="1"
+                                min="1"
+                                class="quantity-input"
+                                required
+                            >
+
+
+                            <button
+                                type="submit"
+                                class="cart-button"
+                            >
+
+                                 Ajouter au panier
+
+                            </button>
+
+                        </form>
+
+
+                    {% else %}
+
+
+                        <button
+                            disabled
+                            class="disabled-button"
+                        >
+
+                            Indisponible
+
+                        </button>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-card">
+
+            <p>
+                Aucun médicament disponible
+                dans cette catégorie.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+{% endif %}
+
+
+
+{% endblock %}

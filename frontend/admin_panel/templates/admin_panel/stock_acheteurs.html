@@ -1,0 +1,181 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}
+Stock des acheteurs
+{% endblock %}
+
+{% block content %}
+
+<div style="margin-bottom: 20px;">
+
+    <h1 style="margin-bottom: 5px;">
+        Stock des acheteurs
+    </h1>
+
+    <p style="margin: 0; color: #555;">
+        Liste des médicaments disponibles dans les stocks des acheteurs.
+    </p>
+
+</div>
+
+
+{% if error %}
+
+<div style="
+    background: #f8d7da;
+    color: #842029;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+<div style="
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow-x: auto;
+">
+
+
+    {% if stocks %}
+
+    <table style="
+        width: 100%;
+        border-collapse: collapse;
+    ">
+
+        <thead>
+
+            <tr>
+
+                <th style="
+                    text-align: left;
+                    padding: 15px;
+                    font-size: 16px;
+                ">
+                    Médicament
+                </th>
+
+                <th style="
+                    text-align: left;
+                    padding: 15px;
+                    font-size: 16px;
+                ">
+                    Acheteur
+                </th>
+
+                <th style="
+                    text-align: center;
+                    padding: 15px;
+                    font-size: 16px;
+                ">
+                    Quantité
+                </th>
+
+                <th style="
+                    text-align: left;
+                    padding: 15px;
+                    font-size: 16px;
+                ">
+                    Date d'ajout
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for stock in stocks %}
+
+            <tr style="
+                border-top: 1px solid #eee;
+            ">
+
+                <td style="
+                    padding: 18px 15px;
+                ">
+
+                    <strong>
+                        {{ stock.medicament_nom }}
+                    </strong>
+
+                </td>
+
+
+                <td style="
+                    padding: 18px 15px;
+                ">
+
+                    <strong>
+                        {{ stock.acheteur_username }}
+                    </strong>
+
+                </td>
+
+
+                <td style="
+                    padding: 18px 15px;
+                    text-align: center;
+                ">
+
+                    <span style="
+                        display: inline-block;
+                        background: #e8f7ee;
+                        color: #198754;
+                        padding: 6px 12px;
+                        border-radius: 20px;
+                        font-weight: bold;
+                    ">
+
+                        {{ stock.quantite }}
+
+                    </span>
+
+                </td>
+
+
+                <td style="
+                    padding: 18px 15px;
+                    color: #666;
+                ">
+
+                    {{ stock.date_ajout|date:"d/m/Y H:i" }}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    {% else %}
+
+    <div style="
+        text-align: center;
+        padding: 40px;
+        color: #666;
+    ">
+
+        <p style="font-size: 18px;">
+            Aucun stock d'acheteur disponible.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

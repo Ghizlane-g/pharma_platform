@@ -1,0 +1,519 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            Pharma Plateforme
+        {% endblock %}
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 58px;
+
+            display: flex;
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 25px;
+
+            background: white;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            position: relative;
+            z-index: 10;
+        }
+
+
+        /* LOGO */
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            text-decoration: none;
+
+            color: #374151;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+        .brand img {
+            width: 30px;
+            height: 30px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+
+        /* MENU */
+
+        .nav-menu {
+            display: flex;
+
+            align-items: center;
+
+            gap: 28px;
+
+            height: 100%;
+        }
+
+        .nav-menu a {
+            height: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            text-decoration: none;
+
+            color: #6b7280;
+
+            font-size: 12px;
+
+            border-bottom: 2px solid transparent;
+
+            transition: 0.2s;
+        }
+
+        .nav-menu a:hover {
+            color: #087443;
+        }
+
+        /* PAGE ACTIVE */
+
+        .nav-menu a.active {
+            color: #087443;
+
+            border-bottom-color: #087443;
+
+            font-weight: bold;
+        }
+
+
+        /* PANIER */
+
+        .cart-link {
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 5px;
+        }
+
+        .cart-count {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 18px;
+            height: 18px;
+
+            border-radius: 50%;
+
+            background: #d9f5df;
+
+            color: #087443;
+
+            font-size: 10px;
+
+            font-weight: bold;
+        }
+
+
+        /* DECONNEXION */
+
+        .logout {
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 5px;
+        }
+
+
+        /* =========================
+           CONTENU
+        ========================= */
+
+        .main-content {
+            min-height: calc(100vh - 58px - 205px);
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            background: #ffffff;
+
+            border-top: 1px solid #e5e7eb;
+
+            padding: 32px 25px 0;
+        }
+
+        .footer-content {
+            display: grid;
+
+            grid-template-columns:
+                1.3fr 1fr 1.2fr;
+
+            gap: 50px;
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding-bottom: 28px;
+        }
+
+
+        .footer-brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+        }
+
+        .footer-brand img {
+            width: 28px;
+            height: 28px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+        .footer-brand strong {
+            font-size: 14px;
+
+            color: #374151;
+        }
+
+
+        .footer-description {
+            color: #6b7280;
+
+            font-size: 11px;
+
+            line-height: 1.7;
+
+            max-width: 300px;
+        }
+
+
+        .footer h4 {
+            color: #374151;
+
+            font-size: 11px;
+
+            margin-bottom: 14px;
+
+            text-transform: uppercase;
+        }
+
+        .footer a {
+            display: block;
+
+            color: #6b7280;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            margin-bottom: 12px;
+        }
+
+        .footer a:hover {
+            color: #087443;
+        }
+
+
+        .contact-item {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 8px;
+
+            color: #6b7280;
+
+            font-size: 11px;
+
+            margin-bottom: 12px;
+
+            line-height: 1.5;
+        }
+
+        .contact-icon {
+            color: #087443;
+
+            font-size: 14px;
+
+            min-width: 15px;
+        }
+
+
+        /* COPYRIGHT */
+
+        .footer-bottom {
+            border-top: 1px solid #e5e7eb;
+
+            padding: 20px 0;
+
+            color: #6b7280;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .nav-menu {
+                gap: 12px;
+            }
+
+            .nav-menu a {
+                font-size: 10px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <!-- LOGO -->
+
+    <a href="{% url 'client_dashboard' %}"
+       class="brand">
+
+        <img
+            src="{% static 'images/logopharma.png' %}"
+            alt="Pharma Plateforme"
+        >
+
+        <span>
+            Pharma Plateforme
+        </span>
+
+    </a>
+
+
+    <!-- MENU -->
+
+    <nav class="nav-menu">
+
+        <!-- DASHBOARD -->
+
+        <a href="{% url 'client_dashboard' %}"
+           class="{% if request.resolver_match.url_name == 'client_dashboard' %}active{% endif %}">
+
+            Dashboard
+
+        </a>
+
+
+        <!-- PANIER -->
+
+        <a href="{% url 'panier' %}"
+           class="cart-link {% if request.resolver_match.url_name == 'panier' %}active{% endif %}">
+
+            Mon panier
+
+        </a>
+
+
+        <!-- COMMANDES -->
+
+        <a href="{% url 'client_commandes' %}"
+           class="{% if request.resolver_match.url_name == 'client_commandes' %}active{% endif %}">
+
+            Mes commandes
+
+        </a>
+
+
+        <!-- DECONNEXION -->
+
+        <a href="{% url 'logout' %}"
+           class="logout">
+
+            Déconnexion
+
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- =========================
+     CONTENU DES PAGES
+========================= -->
+
+<main class="main-content">
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+
+        <!-- PRESENTATION -->
+
+        <div>
+
+            <div class="footer-brand">
+
+                <img
+                    src="{% static 'images/logopharma.png' %}"
+                    alt="Pharma Plateforme"
+                >
+
+                <strong>
+                    Pharma Plateforme
+                </strong>
+
+            </div>
+
+
+            <p class="footer-description">
+
+                Plateforme d'info médicale au Maroc.<br>
+
+                Vous trouverez ici toutes les informations
+                nécessaires pour votre santé et vos médicaments.
+
+            </p>
+
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div>
+
+            <h4>
+                Contactez-nous
+            </h4>
+
+
+            <div class="contact-item">
+
+                <span>
+                    AGADIR, Maroc
+                </span>
+
+            </div>
+
+
+            <div class="contact-item">
+
+                <span>
+                    +212 6 22 00 00 00
+                </span>
+
+            </div>
+
+
+            <div class="contact-item">
+
+                <span>
+                    contact@pharmaplateforme.ma
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- COPYRIGHT -->
+
+    <div class="footer-bottom">
+
+        © 2026 Pharma Plateforme. Tous droits réservés.
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

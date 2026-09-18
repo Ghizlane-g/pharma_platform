@@ -1,0 +1,837 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            Pharma Plateforme
+        {% endblock %}
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7f8;
+            color: #1f2937;
+        }
+
+
+        /* =========================================
+           LAYOUT
+        ========================================= */
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar {
+
+            width: 235px;
+            min-height: 100vh;
+
+            background: white;
+
+            border-right: 1px solid #e5e7eb;
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+            bottom: 0;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+        }
+
+
+        /* =========================================
+           LOGO
+        ========================================= */
+
+        .sidebar-brand {
+
+            height: 75px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 0 20px;
+
+            text-decoration: none;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+
+        .sidebar-brand img {
+
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+
+        .sidebar-brand span {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+
+        /* =========================================
+           MENU
+        ========================================= */
+
+        .menu {
+
+            padding: 22px 14px;
+
+            flex: 1;
+            background:
+            linear-gradient(
+                180deg,
+                #bfe3c8 0%,
+                #fafffb 100%
+            );
+        }
+
+
+        .menu-title {
+
+            font-size: 10px;
+
+            color: #9ca3af;
+
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            margin: 0 12px 12px;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 12px 13px;
+
+            margin-bottom: 6px;
+
+            border-radius: 8px;
+
+            color: #6b7280;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            transition: 0.2s;
+        }
+
+
+        .menu a:hover {
+
+            background: #f0faf3;
+
+            color: #087443;
+        }
+
+
+        .menu a.active {
+
+            background: #e8f7ed;
+
+            color: #087443;
+
+            font-weight: bold;
+        }
+
+
+        .menu-icon {
+
+            width: 22px;
+
+            text-align: center;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================================
+           DECONNEXION
+        ========================================= */
+
+        .logout-section {
+
+            padding: 14px;
+
+            border-top: 1px solid #e5e7eb;
+        }
+
+
+        .logout-section a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 11px 13px;
+
+            border-radius: 8px;
+
+            color: #dc3545;
+
+            text-decoration: none;
+
+            font-size: 13px;
+        }
+
+
+        .logout-section a:hover {
+
+            background: #fff1f2;
+        }
+
+
+        /* =========================================
+           CONTENU PRINCIPAL
+        ========================================= */
+
+        .main-wrapper {
+
+            margin-left: 235px;
+
+            width: calc(100% - 235px);
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        /* =========================================
+           TOPBAR
+        ========================================= */
+
+        .topbar {
+
+            height: 65px;
+
+            background: white;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 30px;
+        }
+
+
+        .page-title {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+
+        .admin-info {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            color: #6b7280;
+
+            font-size: 12px;
+        }
+
+
+        .admin-circle {
+
+            width: 32px;
+            height: 32px;
+
+            border-radius: 50%;
+
+            background: #e8f7ed;
+
+            color: #087443;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================================
+           CONTENU DES PAGES
+        ========================================= */
+
+        .main-content {
+
+            flex: 1;
+
+            padding: 30px;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .footer {
+
+            background: white;
+
+            border-top: 1px solid #e5e7eb;
+
+            padding: 30px 30px 0;
+        }
+
+
+        .footer-content {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns: 1.5fr 1fr;
+
+            gap: 50px;
+
+            padding-bottom: 25px;
+        }
+
+
+        .footer-brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .footer-brand img {
+
+            width: 30px;
+            height: 30px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+        }
+
+
+        .footer-brand strong {
+
+            font-size: 14px;
+
+            color: #374151;
+        }
+
+
+        .footer-description {
+
+            max-width: 320px;
+
+            color: #6b7280;
+
+            font-size: 11px;
+
+            line-height: 1.7;
+        }
+
+
+        .footer h4 {
+
+            font-size: 11px;
+
+            color: #374151;
+
+            text-transform: uppercase;
+
+            margin-bottom: 14px;
+        }
+
+
+        .contact-item {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 8px;
+
+            color: #6b7280;
+
+            font-size: 11px;
+
+            margin-bottom: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        .contact-icon {
+
+            color: #087443;
+
+            font-size: 14px;
+
+            min-width: 15px;
+        }
+
+
+        /* =========================================
+           COPYRIGHT
+        ========================================= */
+
+        .footer-bottom {
+
+            border-top: 1px solid #e5e7eb;
+
+            padding: 18px 0;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+
+                width: 70px;
+            }
+
+
+            .sidebar-brand {
+
+                justify-content: center;
+
+                padding: 0;
+            }
+
+
+            .sidebar-brand span,
+
+            .menu-title,
+
+            .menu a span,
+
+            .logout-section a span {
+
+                display: none;
+            }
+
+
+            .menu a,
+
+            .logout-section a {
+
+                justify-content: center;
+            }
+
+
+            .main-wrapper {
+
+                margin-left: 70px;
+
+                width: calc(100% - 70px);
+            }
+
+
+            .main-content {
+
+                padding: 20px;
+            }
+
+
+            .footer-content {
+
+                grid-template-columns: 1fr;
+
+                gap: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="layout">
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================= -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="sidebar-brand"
+        >
+
+            <img
+                src="{% static 'images/logopharma.png' %}"
+                alt="Logo Pharma"
+            >
+
+            <span>
+                Pharma Plateforme
+            </span>
+
+        </a>
+
+
+        <!-- MENU -->
+
+        <nav class="menu">
+
+
+            <div class="menu-title">
+                Administration
+            </div>
+
+
+            <!-- DASHBOARD -->
+
+            <a href="{% url 'dashboard' %}">
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- COMPTES -->
+
+            <a href="{% url 'comptes' %}">
+
+                <span>
+                    Comptes
+                </span>
+
+            </a>
+
+
+            <!-- ACHETEURS -->
+
+            <a href="{% url 'acheteurs' %}">
+
+                <span>
+                    Acheteurs
+                </span>
+
+            </a>
+
+
+            <!-- CLIENTS -->
+
+            <a href="{% url 'clients' %}">
+
+                <span>
+                    Clients
+                </span>
+
+            </a>
+
+
+            <!-- COMMANDES -->
+
+            <a href="{% url 'commandes' %}">
+
+                <span>
+                    Commandes
+                </span>
+
+            </a>
+
+
+            <!-- DEMANDES -->
+
+            <a href="{% url 'demandes_inscription' %}">
+
+                <span>
+                    Demandes d'inscription
+                </span>
+
+            </a>
+
+
+            <!-- MEDICAMENTS -->
+
+            <a href="{% url 'medicaments' %}">
+
+                <span>
+                    Médicaments
+                </span>
+
+            </a>
+
+
+            <!-- STOCK -->
+
+            <a href="{% url 'stock_acheteurs' %}">
+
+                <span>
+                    Stock des acheteurs
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- DECONNEXION -->
+
+        <div class="logout-section">
+
+            <a href="{% url 'logout' %}">
+                <span>
+                    Déconnexion
+                </span>
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =========================================
+         PARTIE DROITE
+    ========================================= -->
+
+    <div class="main-wrapper">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+
+            <div class="page-title">
+
+                {% block page_title %}
+
+                    Dashboard
+
+                {% endblock %}
+
+            </div>
+
+
+            <div class="admin-info">
+                <span>
+                    Administrateur
+                </span>
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- CONTENU -->
+
+        <main class="main-content">
+
+            {% block content %}
+
+            {% endblock %}
+
+        </main>
+
+
+
+        <!-- =========================================
+             FOOTER
+        ========================================= -->
+
+        <footer class="footer">
+
+
+            <div class="footer-content">
+
+
+                <!-- PRESENTATION -->
+
+                <div>
+
+                    <div class="footer-brand">
+
+                        <img
+                            src="{% static 'images/logopharma.png' %}"
+                            alt="Pharma Plateforme"
+                        >
+
+                        <strong>
+                            Pharma Plateforme
+                        </strong>
+
+                    </div>
+
+
+                    <p class="footer-description">
+
+                        Plateforme de gestion pharmaceutique
+                        au Maroc.
+
+                        Gestion des médicaments,
+                        des acheteurs, des clients
+                        et des commandes.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- CONTACT -->
+
+                <div>
+
+                    <h4>
+                        Contactez-nous
+                    </h4>
+
+
+                    <div class="contact-item">
+
+                        <span>
+                            AGADIR, Maroc
+                        </span>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <span>
+                            +212 6 22 00 00 00
+                        </span>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <span>
+                            contact@pharmaplateforme.ma
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- COPYRIGHT -->
+
+            <div class="footer-bottom">
+
+                © 2026 Pharma Plateforme.
+                Tous droits réservés.
+
+            </div>
+
+
+        </footer>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,837 @@
+{% extends 'client/base.html' %}
+
+{% block title %}
+    Mon panier - Pharma Platform
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* =========================
+       EN-TÊTE
+    ========================= */
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       MESSAGE ERREUR
+    ========================= */
+
+    .error-message {
+        background: #fef2f2;
+        color: #b91c1c;
+
+        border: 1px solid #fecaca;
+
+        padding: 14px 16px;
+
+        border-radius: 8px;
+
+        margin-bottom: 20px;
+
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       PANIER
+    ========================= */
+
+    .cart-container {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+
+    .cart-item {
+
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 12px;
+
+        padding: 22px;
+
+        display: grid;
+
+        grid-template-columns:
+            1fr
+            150px
+            140px
+            100px;
+
+        align-items: center;
+
+        gap: 25px;
+
+        box-shadow:
+            0 2px 8px
+            rgba(0,0,0,0.05);
+
+        transition: 0.2s;
+    }
+
+
+    .cart-item:hover {
+
+        box-shadow:
+            0 5px 15px
+            rgba(0,0,0,0.08);
+    }
+
+
+    /* =========================
+       INFORMATIONS
+    ========================= */
+
+    .product-name {
+
+        font-size: 18px;
+
+        font-weight: bold;
+
+        color: #111827;
+
+        margin-bottom: 8px;
+    }
+
+
+    .unit-price {
+
+        color: #6b7280;
+
+        font-size: 14px;
+    }
+
+
+    .unit-price strong {
+
+        color: #087443;
+    }
+
+
+    /* =========================
+       QUANTITÉ
+    ========================= */
+
+    .quantity-section {
+
+        text-align: center;
+    }
+
+
+    .quantity-label {
+
+        color: #6b7280;
+
+        font-size: 13px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .quantity-form {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 8px;
+    }
+
+
+    .quantity-button {
+
+        width: 34px;
+
+        height: 34px;
+
+        border: 1px solid #d1d5db;
+
+        background: #f9fafb;
+
+        color: #374151;
+
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        font-size: 18px;
+
+        transition: 0.2s;
+    }
+
+
+    .quantity-button:hover {
+
+        background: #30bd66;
+
+        border-color: #30bd66;
+
+        color: white;
+    }
+
+
+    .quantity-value {
+
+        min-width: 30px;
+
+        text-align: center;
+
+        font-weight: bold;
+
+        color: #111827;
+    }
+
+
+    /* =========================
+       SOUS TOTAL
+    ========================= */
+
+    .subtotal {
+
+        text-align: center;
+    }
+
+
+    .subtotal-label {
+
+        color: #6b7280;
+
+        font-size: 13px;
+
+        margin-bottom: 5px;
+    }
+
+
+    .subtotal-value {
+
+        color: #087443;
+
+        font-size: 16px;
+
+        font-weight: bold;
+    }
+
+
+    /* =========================
+       RETIRER
+    ========================= */
+
+    .remove-button {
+
+        color: #dc3545;
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: bold;
+
+        text-align: center;
+
+        transition: 0.2s;
+    }
+
+
+    .remove-button:hover {
+
+        color: #a71d2a;
+
+        text-decoration: underline;
+    }
+
+
+    /* =========================
+       RÉSUMÉ
+    ========================= */
+
+    .cart-summary {
+
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 12px;
+
+        padding: 22px;
+
+        margin-top: 25px;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 20px;
+
+        box-shadow:
+            0 2px 8px
+            rgba(0,0,0,0.05);
+    }
+
+
+    .total-label {
+
+        color: #6b7280;
+
+        font-size: 14px;
+
+        margin-bottom: 5px;
+    }
+
+
+    .total-value {
+
+        color: #087443;
+
+        font-size: 25px;
+
+        font-weight: bold;
+    }
+
+
+    /* =========================
+       BOUTONS
+    ========================= */
+
+    .cart-actions {
+
+        display: flex;
+
+        gap: 10px;
+
+        align-items: center;
+    }
+
+
+    .btn {
+
+        border: none;
+
+        padding: 11px 18px;
+
+        border-radius: 7px;
+
+        cursor: pointer;
+
+        font-size: 13px;
+
+        font-weight: bold;
+
+        transition: 0.2s;
+
+        text-decoration: none;
+
+        display: inline-block;
+    }
+
+
+    .btn-danger {
+
+        background: #dc3545;
+
+        color: white;
+    }
+
+
+    .btn-danger:hover {
+
+        background: #bb2d3b;
+    }
+
+
+    .btn-success {
+
+        background: #30bd66;
+
+        color: white;
+    }
+
+
+    .btn-success:hover {
+
+        background: #229d53;
+    }
+
+
+    /* =========================
+       PANIER VIDE
+    ========================= */
+
+    .empty-cart {
+
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 12px;
+
+        padding: 60px 20px;
+
+        text-align: center;
+
+        box-shadow:
+            0 2px 8px
+            rgba(0,0,0,0.05);
+    }
+
+
+    .empty-cart-icon {
+
+        font-size: 50px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .empty-cart h2 {
+
+        color: #374151;
+
+        font-size: 20px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .empty-cart p {
+
+        color: #6b7280;
+
+        font-size: 14px;
+
+        margin-bottom: 20px;
+    }
+
+
+    .shop-button {
+
+        display: inline-block;
+
+        background: #30bd66;
+
+        color: white;
+
+        text-decoration: none;
+
+        padding: 11px 20px;
+
+        border-radius: 7px;
+
+        font-size: 13px;
+
+        font-weight: bold;
+
+        transition: 0.2s;
+    }
+
+
+    .shop-button:hover {
+
+        background: #229d53;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 900px) {
+
+        .cart-item {
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+        }
+
+        .remove-button {
+
+            text-align: left;
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .cart-item {
+
+            grid-template-columns: 1fr;
+
+            text-align: left;
+        }
+
+        .quantity-section {
+
+            text-align: left;
+        }
+
+        .quantity-form {
+
+            justify-content: flex-start;
+        }
+
+        .subtotal {
+
+            text-align: left;
+        }
+
+        .cart-summary {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+        }
+
+        .cart-actions {
+
+            width: 100%;
+
+            flex-direction: column;
+        }
+
+        .cart-actions form {
+
+            width: 100%;
+        }
+
+        .cart-actions .btn {
+
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+
+
+<!-- =========================
+     EN-TÊTE
+========================= -->
+
+<div class="page-header">
+
+    <h1>
+         Mon panier
+    </h1>
+
+    <p>
+        Vérifiez vos produits avant de valider votre commande.
+    </p>
+
+</div>
+
+
+
+<!-- =========================
+     ERREUR
+========================= -->
+
+{% if error %}
+
+    <div class="error-message">
+
+        {{ error }}
+
+    </div>
+
+{% endif %}
+
+
+
+<!-- =========================
+     PANIER
+========================= -->
+
+{% if panier %}
+
+
+    <div class="cart-container">
+
+
+        {% for item in panier %}
+
+
+        <div class="cart-item">
+
+
+            <!-- =========================
+                 MÉDICAMENT
+            ========================= -->
+
+            <div>
+
+                <div class="product-name">
+
+                    {{ item.nom }}
+
+                </div>
+
+                <div class="unit-price">
+
+                    Prix unitaire :
+
+                    <strong>
+                        {{ item.prix }} DH
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 QUANTITÉ
+            ========================= -->
+
+            <div class="quantity-section">
+
+                <div class="quantity-label">
+
+                    Quantité
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{% url 'modifier_quantite_panier' item.id %}"
+                    class="quantity-form"
+                >
+
+                    {% csrf_token %}
+
+
+                    <button
+                        type="submit"
+                        name="quantite"
+                        value="{{ item.quantite|add:'-1' }}"
+                        class="quantity-button"
+                    >
+
+                        −
+
+                    </button>
+
+
+                    <span class="quantity-value">
+
+                        {{ item.quantite }}
+
+                    </span>
+
+
+                    <button
+                        type="submit"
+                        name="quantite"
+                        value="{{ item.quantite|add:'1' }}"
+                        class="quantity-button"
+                    >
+
+                        +
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+
+            <!-- =========================
+                 SOUS-TOTAL
+            ========================= -->
+
+            <div class="subtotal">
+
+                <div class="subtotal-label">
+
+                    Sous-total
+
+                </div>
+
+                <div class="subtotal-value">
+
+                    {{ item.sous_total }} DH
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 RETIRER
+            ========================= -->
+
+            <div>
+
+                <a
+                    href="{% url 'retirer_panier' item.id %}"
+                    class="remove-button"
+                >
+
+                     Retirer
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+
+    <!-- =========================
+         RÉSUMÉ DU PANIER
+    ========================= -->
+
+    <div class="cart-summary">
+
+
+        <div>
+
+            <div class="total-label">
+
+                Total de la commande
+
+            </div>
+
+            <div class="total-value">
+
+                {{ total }} DH
+
+            </div>
+
+        </div>
+
+
+
+        <div class="cart-actions">
+
+
+            <!-- VIDER -->
+
+            <form
+                method="POST"
+                action="{% url 'vider_panier' %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn btn-danger"
+                >
+
+                    Vider le panier
+
+                </button>
+
+            </form>
+
+
+
+            <!-- VALIDER -->
+
+            <form
+                method="POST"
+                action="{% url 'valider_commande' %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+
+                     Valider la commande
+
+                </button>
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+{% else %}
+
+
+    <!-- =========================
+         PANIER VIDE
+    ========================= -->
+
+    <div class="empty-cart">
+
+        <h2>
+
+            Votre panier est vide
+
+        </h2>
+
+
+        <p>
+
+            Vous n'avez encore ajouté aucun médicament
+            à votre panier.
+
+        </p>
+
+
+        <a
+            href="{% url 'client_dashboard' %}"
+            class="shop-button"
+        >
+
+            Voir les médicaments
+
+        </a>
+
+
+    </div>
+
+
+{% endif %}
+
+
+
+{% endblock %}

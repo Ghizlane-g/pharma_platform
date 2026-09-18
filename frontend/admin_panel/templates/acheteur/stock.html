@@ -1,0 +1,565 @@
+{% extends 'acheteur/base.html' %}
+
+{% block title %}
+    Mon stock
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* =========================
+       TITRE
+    ========================= */
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       MESSAGES
+    ========================= */
+
+    .error,
+    .success {
+        padding: 12px 15px;
+        border-radius: 7px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .error {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+    .success {
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+    }
+
+
+    /* =========================
+       CARDS
+    ========================= */
+
+    .card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .card h2 {
+        font-size: 19px;
+        color: #374151;
+        margin-bottom: 22px;
+    }
+
+
+    /* =========================
+       FORMULAIRE
+    ========================= */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr auto;
+        gap: 18px;
+        align-items: end;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: bold;
+        color: #374151;
+        margin-bottom: 7px;
+    }
+
+    select,
+    input[type="number"] {
+        width: 100%;
+        height: 42px;
+        padding: 0 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        background: white;
+        color: #374151;
+        font-size: 13px;
+        outline: none;
+    }
+
+    select:focus,
+    input[type="number"]:focus {
+        border-color: #087443;
+    }
+
+
+    /* =========================
+       BOUTONS
+    ========================= */
+
+    .btn {
+        height: 42px;
+        border: none;
+        border-radius: 7px;
+        padding: 0 20px;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn-add {
+        background: #087443;
+        color: white;
+    }
+
+    .btn-add:hover {
+        background: #065c35;
+    }
+
+    .btn-modifier {
+        background: #e8f5ed;
+        color: #087443;
+        padding: 8px 13px;
+        height: auto;
+    }
+
+    .btn-modifier:hover {
+        background: #d9efdf;
+    }
+
+    .btn-supprimer {
+        background: #fee2e2;
+        color: #b91c1c;
+        padding: 8px 13px;
+        height: auto;
+    }
+
+    .btn-supprimer:hover {
+        background: #fecaca;
+    }
+
+
+    /* =========================
+       TABLEAU
+    ========================= */
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #f9fafb;
+    }
+
+    th {
+        text-align: left;
+        padding: 13px 15px;
+        color: #6b7280;
+        font-size: 12px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+        padding: 15px;
+        font-size: 13px;
+        color: #374151;
+        border-bottom: 1px solid #f0f0f0;
+        vertical-align: middle;
+    }
+
+    tbody tr:hover {
+        background: #fafafa;
+    }
+
+
+    /* =========================
+       QUANTITE
+    ========================= */
+
+    .quantity-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .quantity-form input {
+        width: 75px;
+        height: 36px;
+    }
+
+
+    /* =========================
+       STOCK VIDE
+    ========================= */
+
+    .empty-stock {
+        text-align: center;
+        padding: 35px 20px;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .btn-add {
+            width: 100%;
+        }
+
+        .card {
+            padding: 18px;
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+        }
+
+    }
+
+</style>
+
+
+<!-- =========================
+     EN-TÊTE
+========================= -->
+
+<div class="page-header">
+
+    <h1>
+        Mon stock
+    </h1>
+
+    <p>
+        Gérez les médicaments disponibles dans votre stock.
+    </p>
+
+</div>
+
+
+<!-- =========================
+     MESSAGES
+========================= -->
+
+{% if error %}
+
+    <div class="error">
+        {{ error }}
+    </div>
+
+{% endif %}
+
+
+{% if success %}
+
+    <div class="success">
+        {{ success }}
+    </div>
+
+{% endif %}
+
+
+
+<!-- =========================
+     AJOUTER UN MÉDICAMENT
+========================= -->
+
+<div class="card">
+
+    <h2>
+        Ajouter un médicament au stock
+    </h2>
+
+
+    <form
+        method="post"
+        action="{% url 'ajouter_stock_frontend' %}"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="form-grid">
+
+
+            <!-- MÉDICAMENT -->
+
+            <div class="form-group">
+
+                <label for="medicament">
+                    Médicament
+                </label>
+
+                <select
+                    id="medicament"
+                    name="medicament"
+                    required
+                >
+
+                    <option value="">
+                        -- Sélectionner un médicament --
+                    </option>
+
+
+                    {% for medicament in medicaments %}
+
+                        <option value="{{ medicament.id }}">
+
+                            {{ medicament.nom }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- QUANTITÉ -->
+
+            <div class="form-group">
+
+                <label for="quantite">
+                    Quantité
+                </label>
+
+                <input
+                    id="quantite"
+                    type="number"
+                    name="quantite"
+                    min="1"
+                    required
+                >
+
+            </div>
+
+
+            <!-- BOUTON -->
+
+            <div>
+
+                <button
+                    type="submit"
+                    class="btn btn-add"
+                >
+
+                    + Ajouter au stock
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+<!-- =========================
+     MON STOCK
+========================= -->
+
+<div class="card">
+
+    <h2>
+        Médicaments dans mon stock
+    </h2>
+
+
+    {% if stocks %}
+
+
+        <div class="table-container">
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Médicament
+                        </th>
+
+                        <th>
+                            Quantité
+                        </th>
+
+                        <th>
+                            Date d'ajout
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for stock in stocks %}
+
+                    <tr>
+
+
+                        <!-- MÉDICAMENT -->
+
+                        <td>
+
+                            <strong>
+                                {{ stock.medicament_nom }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- QUANTITÉ -->
+
+                        <td>
+
+                            <form
+                                method="post"
+                                action="{% url 'modifier_stock_frontend' stock.id %}"
+                                class="quantity-form"
+                            >
+
+                                {% csrf_token %}
+
+
+                                <input
+                                    type="number"
+                                    name="quantite"
+                                    value="{{ stock.quantite }}"
+                                    min="0"
+                                    required
+                                >
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-modifier"
+                                >
+
+                                    Modifier
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {{ stock.date_ajout }}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <form
+                                method="post"
+                                action="{% url 'supprimer_stock_frontend' stock.id %}"
+                                onsubmit="return confirm('Voulez-vous vraiment supprimer ce médicament du stock ?');"
+                            >
+
+                                {% csrf_token %}
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-supprimer"
+                                >
+
+                                    Supprimer
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty-stock">
+
+            <p>
+                Votre stock est actuellement vide.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}

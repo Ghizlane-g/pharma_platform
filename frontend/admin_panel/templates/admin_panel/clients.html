@@ -1,0 +1,117 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}
+Clients
+{% endblock %}
+
+{% block content %}
+
+<h1>Gestion des clients</h1>
+
+<p style="margin-top: 10px; color: #6b7280;">
+    Liste des comptes ayant le rôle Client.
+</p>
+
+<div class="card" style="margin-top: 25px;">
+
+    <div style="margin-bottom: 20px;">
+        <button
+            style="
+                padding: 10px 18px;
+                border: none;
+                border-radius: 7px;
+                cursor: pointer;
+            "
+        >
+           <a href="{% url 'Ajouter_Client' %}">
+                + Ajouter un client
+            </a>
+        </button>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse;">
+
+        <thead>
+
+            <tr style="text-align: left; border-bottom: 1px solid #ddd;">
+
+                <th style="padding: 15px;">ID</th>
+                <th style="padding: 15px;">Username</th>
+                <th style="padding: 15px;">Nom</th>
+                <th style="padding: 15px;">Prénom</th>
+                <th style="padding: 15px;">Email</th>
+                <th style="padding: 15px;">Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for client in clients %}
+
+            <tr style="border-bottom: 1px solid #eee;">
+
+                <td style="padding: 15px;">
+                    {{ client.id }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ client.username }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ client.last_name }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ client.first_name }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ client.email }}
+                </td>
+                <td> {% if client.is_active %}  Actif {% else %}  Désactivé {% endif %} </td>
+                <td style="padding: 15px;">
+                    <button>
+                      {% if client.is_active %}
+                        Actif |
+                        <a href="{% url 'modifier_client' client.id %}">
+                            modifier
+                        </a>
+                        <a href="{% url 'desactiver_client' client.id %}">
+                            Désactiver
+                        </a>
+ 
+                        {% else %}
+
+                            Désactivé |
+
+                            <a href="{% url 'activer_client' client.id %}">
+                                Activer
+                            </a>
+
+                        {% endif %}  
+                    </button>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="6" style="padding: 20px;">
+                    Aucun acheteur trouvé.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

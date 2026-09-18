@@ -1,0 +1,117 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}
+Acheteurs
+{% endblock %}
+
+{% block content %}
+
+<h1>Gestion des acheteurs</h1>
+
+<p style="margin-top: 10px; color: #6b7280;">
+    Liste des comptes ayant le rôle Acheteur.
+</p>
+
+<div class="card" style="margin-top: 25px;">
+
+    <div style="margin-bottom: 20px;">
+        <button
+            style="
+                padding: 10px 18px;
+                border: none;
+                border-radius: 7px;
+                cursor: pointer;
+            "
+        >
+           <a href="{% url 'Ajouter_Acheteur' %}">
+                + Ajouter un acheteur
+            </a>
+        </button>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse;">
+
+        <thead>
+
+            <tr style="text-align: left; border-bottom: 1px solid #ddd;">
+
+                <th style="padding: 15px;">ID</th>
+                <th style="padding: 15px;">Username</th>
+                <th style="padding: 15px;">Nom</th>
+                <th style="padding: 15px;">Prénom</th>
+                <th style="padding: 15px;">Email</th>
+                <th style="padding: 15px;">Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for acheteur in acheteurs %}
+
+            <tr style="border-bottom: 1px solid #eee;">
+
+                <td style="padding: 15px;">
+                    {{ acheteur.id }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ acheteur.username }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ acheteur.last_name }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ acheteur.first_name }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ acheteur.email }}
+                </td>
+                <td> {% if acheteur.is_active %}  Actif {% else %}  Désactivé {% endif %} </td>
+                <td style="padding: 15px;">
+                    <button>
+                      {% if acheteur.is_active %}
+                        Actif |
+                        <a href="{% url 'modifier_acheteur' acheteur.id %}">
+                            modifier
+                        </a>
+                        <a href="{% url 'desactiver_acheteur' acheteur.id %}">
+                            Désactiver
+                        </a>
+ 
+                        {% else %}
+
+                            Désactivé |
+
+                            <a href="{% url 'activer_acheteur' acheteur.id %}">
+                                Activer
+                            </a>
+
+                        {% endif %}  
+                    </button>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="6" style="padding: 20px;">
+                    Aucun acheteur trouvé.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

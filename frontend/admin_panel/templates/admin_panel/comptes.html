@@ -1,0 +1,72 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}
+Comptes
+{% endblock %}
+
+{% block content %}
+
+<h1>Gestion des comptes</h1>
+
+<p style="margin-top: 10px; color: #6b7280;">
+    Liste de tous les comptes de la plateforme.
+</p>
+
+<div class="card" style="margin-top: 25px;">
+
+    <table style="width: 100%; border-collapse: collapse;">
+
+        <thead>
+
+            <tr style="text-align: left; border-bottom: 1px solid #ddd;">
+
+                <th style="padding: 15px;">ID</th>
+                <th style="padding: 15px;">Username</th>
+                <th style="padding: 15px;">Email</th>
+                <th style="padding: 15px;">Rôle</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for compte in comptes %}
+
+            <tr style="border-bottom: 1px solid #eee;">
+
+                <td style="padding: 15px;">
+                    {{ compte.id }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ compte.username }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ compte.email }}
+                </td>
+
+                <td style="padding: 15px;">
+                    {{ compte.role }}
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="4" style="padding: 20px;">
+                    Aucun compte trouvé.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

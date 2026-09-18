@@ -1,0 +1,614 @@
+{% extends 'client/base.html' %}
+
+{% block title %}
+    Mes commandes - Pharma Platform
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* =========================
+       EN-TÊTE
+    ========================= */
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+        color: #111827;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       CARTE PRINCIPALE
+    ========================= */
+
+    .orders-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+
+        box-shadow:
+            0 2px 8px
+            rgba(0, 0, 0, 0.06);
+
+        border: 1px solid #e5e7eb;
+    }
+
+
+    /* =========================
+       TABLEAU
+    ========================= */
+
+    .orders-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 750px;
+    }
+
+
+    .orders-table thead {
+        background: #f8faf9;
+    }
+
+
+    .orders-table th {
+        text-align: left;
+
+        padding: 14px 12px;
+
+        font-size: 13px;
+
+        color: #374151;
+
+        font-weight: 700;
+
+        border-bottom:
+            1px solid #e5e7eb;
+    }
+
+
+    .orders-table td {
+        padding: 16px 12px;
+
+        font-size: 14px;
+
+        color: #374151;
+
+        border-bottom:
+            1px solid #f0f0f0;
+
+        vertical-align: middle;
+    }
+
+
+    .orders-table tbody tr {
+        transition: 0.2s;
+    }
+
+
+    .orders-table tbody tr:hover {
+        background: #f9fafb;
+    }
+
+
+    /* =========================
+       ID COMMANDE
+    ========================= */
+
+    .order-id {
+        color: #087443;
+
+        font-weight: bold;
+    }
+
+
+    /* =========================
+       MÉDICAMENT
+    ========================= */
+
+    .medicament-name {
+        font-weight: 600;
+
+        color: #111827;
+
+        margin-bottom: 4px;
+    }
+
+
+    .medicament-line {
+        margin-bottom: 8px;
+    }
+
+
+    .medicament-line:last-child {
+        margin-bottom: 0;
+    }
+
+
+    /* =========================
+       PRIX
+    ========================= */
+
+    .price {
+        font-weight: 500;
+    }
+
+
+    .total {
+        color: #087443;
+
+        font-size: 15px;
+
+        font-weight: bold;
+    }
+
+
+    /* =========================
+       STATUT
+    ========================= */
+
+    .status {
+        display: inline-block;
+
+        padding: 6px 11px;
+
+        border-radius: 20px;
+
+        font-size: 12px;
+
+        font-weight: bold;
+
+        white-space: nowrap;
+    }
+
+
+    .status-attente {
+        background: #fff7ed;
+
+        color: #c2410c;
+    }
+
+
+    .status-cours {
+        background: #eff6ff;
+
+        color: #2563eb;
+    }
+
+
+    .status-livree {
+        background: #ecfdf5;
+
+        color: #15803d;
+    }
+
+
+    .status-annulee {
+        background: #fef2f2;
+
+        color: #dc2626;
+    }
+
+
+    .status-default {
+        background: #f3f4f6;
+
+        color: #4b5563;
+    }
+
+
+    /* =========================
+       MESSAGE ERREUR
+    ========================= */
+
+    .error-message {
+        padding: 15px;
+
+        background: #fef2f2;
+
+        color: #b91c1c;
+
+        border-radius: 8px;
+
+        border: 1px solid #fecaca;
+    }
+
+
+    /* =========================
+       AUCUNE COMMANDE
+    ========================= */
+
+    .empty-orders {
+        text-align: center;
+
+        padding: 50px 20px;
+
+        color: #6b7280;
+    }
+
+
+    .empty-icon {
+        font-size: 45px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .empty-orders h3 {
+        color: #374151;
+
+        margin-bottom: 8px;
+
+        font-size: 18px;
+    }
+
+
+    .empty-orders p {
+        font-size: 14px;
+
+        margin-bottom: 20px;
+    }
+
+
+    .shop-button {
+        display: inline-block;
+
+        padding: 10px 18px;
+
+        background: #30bd66;
+
+        color: white;
+
+        text-decoration: none;
+
+        border-radius: 7px;
+
+        font-size: 13px;
+
+        font-weight: bold;
+
+        transition: 0.2s;
+    }
+
+
+    .shop-button:hover {
+        background: #229d53;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+        .orders-card {
+            padding: 15px;
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+        }
+
+    }
+
+</style>
+
+
+
+<!-- =========================
+     EN-TÊTE
+========================= -->
+
+<div class="page-header">
+
+    <h1>
+        Mes commandes
+    </h1>
+
+    <p>
+        Consultez l'historique de vos commandes.
+    </p>
+
+</div>
+
+
+
+<!-- =========================
+     COMMANDES
+========================= -->
+
+<div class="orders-card">
+
+
+    {% if error %}
+
+        <div class="error-message">
+
+            {{ error }}
+
+        </div>
+
+
+    {% elif commandes %}
+
+
+        <div class="orders-table-wrapper">
+
+            <table class="orders-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Médicament
+                        </th>
+
+                        <th>
+                            Quantité
+                        </th>
+
+                        <th>
+                            Prix unitaire
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Statut
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for commande in commandes %}
+
+
+                    <tr>
+
+
+                        <!-- ID -->
+
+                        <td>
+
+                            <span class="order-id">
+
+                                #{{ commande.id }}
+
+                            </span>
+
+                        </td>
+
+
+
+                        <!-- MÉDICAMENT -->
+
+                        <td>
+
+                            {% for ligne in commande.lignes %}
+
+                                <div class="medicament-line">
+
+                                    <div class="medicament-name">
+
+                                        {{ ligne.medicament_nom }}
+
+                                    </div>
+
+                                </div>
+
+                            {% empty %}
+
+                                -
+
+                            {% endfor %}
+
+                        </td>
+
+
+
+                        <!-- QUANTITÉ -->
+
+                        <td>
+
+                            {% for ligne in commande.lignes %}
+
+                                <div class="medicament-line">
+
+                                    {{ ligne.quantite }}
+
+                                </div>
+
+                            {% empty %}
+
+                                -
+
+                            {% endfor %}
+
+                        </td>
+
+
+
+                        <!-- PRIX -->
+
+                        <td>
+
+                            {% for ligne in commande.lignes %}
+
+                                <div class="medicament-line price">
+
+                                    {{ ligne.prix_unitaire }} DH
+
+                                </div>
+
+                            {% empty %}
+
+                                -
+
+                            {% endfor %}
+
+                        </td>
+
+
+
+                        <!-- TOTAL -->
+
+                        <td>
+
+                            <span class="total">
+
+                                {{ commande.total }} DH
+
+                            </span>
+
+                        </td>
+
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {{ commande.date_creation|date:"d/m/Y H:i" }}
+
+                        </td>
+
+
+
+                        <!-- STATUT -->
+
+                        <td>
+
+
+                            {% if commande.statut == "EN_ATTENTE" %}
+
+                                <span class="status status-attente">
+
+                                    En attente
+
+                                </span>
+
+
+                            {% elif commande.statut == "EN_COURS" %}
+
+                                <span class="status status-cours">
+
+                                    En cours
+
+                                </span>
+
+
+                            {% elif commande.statut == "LIVREE" %}
+
+                                <span class="status status-livree">
+
+                                    Livrée
+
+                                </span>
+
+
+                            {% elif commande.statut == "ANNULEE" %}
+
+                                <span class="status status-annulee">
+
+                                    Annulée
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="status status-default">
+
+                                    {{ commande.statut }}
+
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- AUCUNE COMMANDE -->
+
+        <div class="empty-orders">
+
+
+            <h3>
+                Aucune commande
+            </h3>
+
+            <p>
+                Vous n'avez pas encore passé de commande.
+            </p>
+
+            <a
+                href="{% url 'client_dashboard' %}"
+                class="shop-button"
+            >
+                Voir les médicaments
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}
