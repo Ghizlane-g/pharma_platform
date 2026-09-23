@@ -113,7 +113,7 @@ The application follows a frontend/backend architecture.
  Docker Architecture
 
 The application components are containerized using Docker and managed with Docker Compose.
-
+```text
 ┌─────────────────────────────────────────────┐
 │               Docker Compose                │
 │                                             │
@@ -129,7 +129,7 @@ The application components are containerized using Docker and managed with Docke
 │                         │  Database   │    │
 │                         └─────────────┘    │
 └─────────────────────────────────────────────┘
-
+```
 ---
 
  Technology Stack
