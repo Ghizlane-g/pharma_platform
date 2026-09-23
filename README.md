@@ -26,19 +26,19 @@ Main Objectives
 
 ### Admin Login
 
-![Admin Login](screenshots/login.png)
+![Admin Login](screenshots/login.jpg)
 
 ### Admin Dashboard
 
-![Admin Dashboard](screenshots/dashboard.png)
+![Admin Dashboard](screenshots/dashboard.jpg)
 
 ### Acheteur Management
 
-![Acheteur Management](screenshots/acheteurs.png)
+![Acheteur Management](screenshots/acheteurs.jpg)
 
 ### Client Management
 
-![Client Management](screenshots/clients.png)
+![Client Management](screenshots/clients.jpg)
 
 ---
 
