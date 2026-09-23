@@ -22,23 +22,23 @@ Main Objectives
 
 ---
 
-Application Preview
+## Application Preview
 
-Login
+### Admin Login
 
-![Admin Login] (screenshots/login.jpg)
+![Admin Login](screenshots/login.png)
 
-Admin Dashboard
+### Admin Dashboard
 
-![Admin Dashboard] (screenshots/dashboard.jpg)
+![Admin Dashboard](screenshots/dashboard.png)
 
-Buyers Management
+### Acheteur Management
 
-![Buyers Management] (screenshots/acheteurs.jpg)
+![Acheteur Management](screenshots/acheteurs.png)
 
-Clients Management
+### Client Management
 
-![Clients Management] (screenshots/clients.jpg)
+![Client Management](screenshots/clients.png)
 
 ---
 
