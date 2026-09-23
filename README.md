@@ -26,19 +26,19 @@ Application Preview
 
 Login
 
-"Admin Login" (screenshots/login.jpg)
+![Admin Login] (screenshots/login.jpg)
 
 Admin Dashboard
 
-"Admin Dashboard" (screenshots/dashboard.jpg)
+![Admin Dashboard] (screenshots/dashboard.jpg)
 
 Buyers Management
 
-"Buyers Management" (screenshots/acheteurs.jpg)
+![Buyers Management] (screenshots/acheteurs.jpg)
 
 Clients Management
 
-"Clients Management" (screenshots/clients.jpg)
+![Clients Management] (screenshots/clients.jpg)
 
 ---
 
