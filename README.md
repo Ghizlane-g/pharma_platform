@@ -26,19 +26,19 @@ Application Preview
 
 Login
 
-"Admin Login" (screenshots/login.png)
+"Admin Login" (screenshots/login.jpg)
 
 Admin Dashboard
 
-"Admin Dashboard" (screenshots/dashboard.png)
+"Admin Dashboard" (screenshots/dashboard.jpg)
 
 Buyers Management
 
-"Buyers Management" (screenshots/acheteurs.png)
+"Buyers Management" (screenshots/acheteurs.jpg)
 
 Clients Management
 
-"Clients Management" (screenshots/clients.png)
+"Clients Management" (screenshots/clients.jpg)
 
 ---
 
@@ -117,17 +117,17 @@ The application components are containerized using Docker and managed with Docke
 ┌─────────────────────────────────────────────┐
 │               Docker Compose                │
 │                                             │
-│  ┌──────────────┐       ┌──────────────┐    │
-│  │   Frontend   │       │   Backend    │    │
-│  │    Django    │──────►│ Django / DRF │    │
-│  │    :8000     │ REST  │    :8001     │    │
-│  └──────────────┘       └──────┬───────┘    │
-│                                │            │
-│                                ▼            │
-│                         ┌─────────────┐     │
-│                         │   SQLite    │     │
-│                         │  Database   │     │
-│                         └─────────────┘     │
+│  ┌──────────────┐       ┌──────────────┐   │
+│  │   Frontend   │       │   Backend    │   │
+│  │    Django    │──────►│ Django / DRF │   │
+│  │    :8000     │ REST  │    :8001     │   │
+│  └──────────────┘       └──────┬───────┘   │
+│                                │           │
+│                                ▼           │
+│                         ┌─────────────┐    │
+│                         │   SQLite    │    │
+│                         │  Database   │    │
+│                         └─────────────┘    │
 └─────────────────────────────────────────────┘
 
 ---
@@ -160,10 +160,9 @@ DevOps & Tools
 - Postman
 - Visual Studio Code
 
----
-
  Project Structure
 
+```text
 pharma_platform/
 │
 ├── backend/
@@ -188,7 +187,7 @@ pharma_platform/
 ├── .gitignore
 └── README.md
 
----
+```
 
  Configuration Details
 
